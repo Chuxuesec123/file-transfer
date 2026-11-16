@@ -268,7 +268,8 @@ async function loadDir(path) {
   try {
     const entries = await fetchEntries(path);
     if (token !== state.metaToken) return;
-    state.entries = entries;
+    /* .gitkeep 只用于让 git 保留空的共享目录，不在列表里展示 */
+    state.entries = entries.filter(e => e.name !== '.gitkeep');
     render();
     fillMeta(token);
   } catch (err) {
