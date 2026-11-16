@@ -1,0 +1,16 @@
+# 共享目录里的文件不提交，只保留目录本身
+files/*
+!files/.gitkeep
+
+# 上传中的临时文件
+*.part
+
+# Python
+__pycache__/
+*.py[cod]
+
+# 系统 / 编辑器
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

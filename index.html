@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="referrer" content="no-referrer">
+<title>文件互传</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2322d3ee' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M7 4v13m0 0-3-3m3 3 3-3M17 20V7m0 0-3 3m3-3 3 3'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="topbar">
+  <a class="brand" href="#/" id="home" title="根目录">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4v13m0 0-3-3m3 3 3-3M17 20V7m0 0-3 3m3-3 3 3"/></svg>
+    <span>文件互传</span>
+  </a>
+  <nav class="crumbs" id="crumbs" aria-label="路径"></nav>
+  <div class="top-actions">
+    <label class="search" title="筛选当前目录（/）">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.6-3.6"/></svg>
+      <input id="search" type="search" placeholder="筛选" autocomplete="off" spellcheck="false" aria-label="筛选文件">
+      <kbd>Esc</kbd>
+    </label>
+    <button class="icon-btn" id="refresh" title="刷新（双击列表也可刷新）" aria-label="刷新">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 6.3"/><path d="M20 5v6h-6"/></svg>
+    </button>
+    <button class="icon-btn" id="theme" title="切换主题" aria-label="切换主题">
+      <svg class="ico-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></svg>
+      <svg class="ico-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+    </button>
+  </div>
+</header>
+
+<main>
+  <section class="toolbar" id="toolbar">
+    <label class="btn primary" for="fileInput">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0L8 8m4-4 4 4"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
+      上传文件
+    </label>
+    <label class="btn" for="dirInput">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M12 17v-5m0 0-2.5 2.5M12 12l2.5 2.5"/></svg>
+      上传文件夹
+    </label>
+    <button class="btn" id="newFolder">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/><path d="M12 11v6m-3-3h6"/></svg>
+      新建文件夹
+    </button>
+    <span class="mode" id="mode" title="服务能力">
+      <i></i><b>检测中</b>
+    </span>
+    <input id="fileInput" type="file" multiple hidden>
+    <input id="dirInput" type="file" webkitdirectory directory multiple hidden>
+  </section>
+
+  <section class="queue" id="queue" hidden>
+    <div class="queue-head">
+      <span class="queue-title" id="queueTitle">传输</span>
+      <div class="queue-bar"><i id="queueBar"></i></div>
+      <button class="ghost" id="queueClear">清除已完成</button>
+    </div>
+    <div class="queue-list" id="queueList"></div>
+  </section>
+
+  <section class="files">
+    <div class="list-head">
+      <button class="sort" data-sort="name">名称<i></i></button>
+      <button class="sort" data-sort="size">大小<i></i></button>
+      <button class="sort" data-sort="time">修改时间<i></i></button>
+      <span class="ops-label">操作</span>
+    </div>
+    <div class="list" id="list" role="list"></div>
+    <div class="empty" id="empty" hidden>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>
+      <span id="emptyText">空文件夹</span>
+    </div>
+  </section>
+</main>
+
+<div class="drop-overlay" id="overlay" hidden>
+  <div class="drop-card">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 16V4m0 0L8 8m4-4 4 4"/><path d="M4 15v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/></svg>
+    <span>释放以上传</span>
+  </div>
+</div>
+
+<dialog id="modal" class="modal"></dialog>
+<div class="toasts" id="toasts" aria-live="polite"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
