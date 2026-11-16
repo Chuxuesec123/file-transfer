@@ -5,6 +5,7 @@
 ## 启动
 
 ```bash
+git clone https://github.com/Chuxuesec123/file-transfer.git   # 或直接拷贝本目录
 cd file-transfer
 python3 server.py 80          # 完整功能：浏览 / 下载 / 上传 / 删除 / 新建文件夹
 ```
